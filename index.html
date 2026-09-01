@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Original Artwork Catalog | TINNTIRA</title>
+  <meta name="description" content="Original traditional watercolor & ink artworks by TINNTIRA. Browse available original pieces and copy order information to inquire.">
+  <meta name="robots" content="index,follow">
+  <style>
+    :root {
+      --bg-color: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #1e293b;
+      --text-sub: #64748b;
+      --primary: #334155;
+      --accent: #2563eb;
+      --status-available: #16a34a;
+      --status-pending: #d97706;
+      --status-sold: #94a3b8;
+      --border-color: #e2e8f0;
+      --border-radius: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      line-height: 1.5;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .profile-avatar {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      border: 3px solid #fff;
+    }
+
+    header h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+
+    header p {
+      color: var(--text-sub);
+      font-size: 1rem;
+      margin-bottom: 14px;
+    }
+
+    /* Social Links */
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .social-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: #fff;
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-main);
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .social-btn:hover {
+      background: #f1f5f9;
+      transform: translateY(-2px);
+    }
+
+    /* Notice Box */
+    .notice-box {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-left: 4px solid var(--accent);
+      border-radius: 8px;
+      padding: 18px 22px;
+      margin-bottom: 30px;
+      font-size: 0.92rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+
+    .notice-box ul {
+      margin-left: 20px;
+      margin-top: 8px;
+      color: var(--text-sub);
+    }
+
+    .notice-box li {
+      margin-bottom: 5px;
+    }
+
+    /* Filters */
+    .filter-section {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 8px 18px;
+      border: 1px solid var(--border-color);
+      background: #fff;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--text-sub);
+      transition: all 0.2s ease;
+    }
+
+    .filter-btn:hover {
+      background: #f1f5f9;
+      color: var(--text-main);
+    }
+
+    .filter-btn.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    /* Gallery Grid */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 24px;
+    }
+
+    /* Card */
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      border: 1px solid var(--border-color);
+      overflow: hidden;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 20px -3px rgba(0, 0, 0, 0.08);
+    }
+
+    .image-wrapper {
+      position: relative;
+      width: 100%;
+      padding-top: 130%;
+      background: #f1f5f9;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .image-wrapper img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .image-wrapper:hover img {
+      transform: scale(1.04);
+    }
+
+    .card-body {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .card-header-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .item-id {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--primary);
+      letter-spacing: 0.05em;
+    }
+
+    /* Badges */
+    .status-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      color: #fff;
+      text-transform: uppercase;
+    }
+
+    .status-available { background-color: var(--status-available); }
+    .status-pending { background-color: var(--status-pending); }
+    .status-sold { background-color: var(--status-sold); }
+
+    .item-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: var(--text-main);
+    }
+
+    .item-medium {
+      font-size: 0.8rem;
+      color: var(--text-sub);
+      margin-bottom: 12px;
+      flex-grow: 1;
+    }
+
+    .price-row {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .item-price {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .shipping-note {
+      font-size: 0.75rem;
+      color: var(--text-sub);
+    }
+
+    /* Action Buttons */
+    .action-btn {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      background-color: #f1f5f9;
+      color: var(--text-main);
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .action-btn:hover {
+      background-color: var(--primary);
+      color: #fff;
+    }
+
+    .action-btn.disabled {
+      cursor: not-allowed;
+      background-color: #f8fafc;
+      color: #94a3b8;
+      border: 1px solid var(--border-color);
+    }
+
+    /* Toast Notification */
+    #toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: rgba(15, 23, 42, 0.9);
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: 30px;
+      font-size: 0.88rem;
+      transition: transform 0.3s ease;
+      z-index: 1000;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    #toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.85);
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+      padding: 20px;
+    }
+
+    .modal img {
+      max-width: 95%;
+      max-height: 90vh;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <img src="https://ui-avatars.com/api/?name=Artist&background=334155&color=fff&size=180" alt="Artist Profile" class="profile-avatar">
+      <h1>Original Artwork Catalog</h1>
+      <p>Original traditional watercolor & ink drawings</p>
+
+      <div class="social-links">
+        <a href="https://x.com/tinntira" target="_blank" rel="noopener noreferrer" class="social-btn">🐦 X (Twitter)</a>
+        <a href="https://www.pixiv.net/users/81050878" target="_blank" rel="noopener noreferrer" class="social-btn">🎨 pixiv</a>
+      </div>
+    </header>
+
+    <div class="notice-box">
+      <strong>📌 How to Order & Shipping Guidelines:</strong>
+      <ul>
+        <li><strong>Original Artworks:</strong> Every artwork listed here is a unique, one-of-a-kind physical original piece (Watercolor & Ink on Paper).</li>
+        <li><strong>Shipping Fee:</strong> <u>Shipping is NOT included</u> in the artwork price. Shipping costs will be calculated based on your destination country.</li>
+        <li><strong>How to Claim:</strong> Click the <strong>"📋 Copy Order Info"</strong> button on your desired artwork and send it to me via DM on social media.</li>
+      </ul>
+    </div>
+
+
+    <div class="notice-box">
+      <strong>🎨 Commissions</strong>
+      <ul>
+        <li>Illustration commissions start at <strong>$50 USD</strong>.</li>
+        <li>Choose between <strong>digital art</strong> and <strong>traditional watercolor</strong>.</li>
+        <li>For commission inquiries, please contact me through <strong>X (Twitter)</strong>. I can also share my Discord for further discussion.</li>
+      </ul>
+      <p style="margin-top:12px;">
+        <a href="https://x.com/tinntira" target="_blank" rel="noopener noreferrer" class="social-btn">💬 Commission Inquiry on X</a>
+      </p>
+    </div>
+
+    <div class="filter-section">
+      <button class="filter-btn active" onclick="applyFilter('all')">All Works</button>
+      <button class="filter-btn" onclick="applyFilter('series-a')">Series A ($45 USD)</button>
+      <button class="filter-btn" onclick="applyFilter('series-b')">Series B ($35 USD)</button>
+      <button class="filter-btn" onclick="applyFilter('available')">Available Only</button>
+      <button class="filter-btn" onclick="applyFilter('sold')">Sold Out</button>
+    </div>
+
+    <div class="gallery-grid" id="gallery"></div>
+  </div>
+
+  <div id="toast">📋 Order info copied! Please paste it into your DM to order.</div>
+
+  <div class="modal" id="imageModal" onclick="closeModal()">
+    <img id="modalImg" src="" alt="Artwork Preview">
+  </div>
+
+  <script>
+    // =========================================================================
+    // Artwork Database (全18作品 Google Drive 直リンク反映済み)
+    // status: 'available' | 'pending' | 'sold'
+    // =========================================================================
+    const items = [
+      // Series A ($45 USD)
+      {
+        id: "A-01",
+        series: "a",
+        title: "Cat: City",
+        price: "$45 USD",
+        status: "available",
+        medium: "Original Watercolor & Ink on Paper",
+        image: "https://lh3.googleusercontent.com/d/1n9LXTf-5ES8oGi4UKYtvPrejBMiGPsjG"
+      },
+      {
+        id: "A-02",
+        series: "a",
+        title: "Rex",
+        price: "$45 USD",
+        status: "available",
+        medium: "Original Watercolor & Ink on Paper",
+        image: "https://lh3.googleusercontent.com/d/16G2HORQwBNLc_JOToMmEQDKicMpWq7mj"
+      },
+      {
+        id: "A-03",
+        series: "a",
+        title: "Otter",
+        price: "$45 USD",
+        status: "available",
+        medium: "Original Watercolor & Ink on Paper",
+        image: "https://lh3.googleusercontent.com/d/1jgD9bsK0xtJPtIgiWvkp9K35ZG4Sd2w2"
+      },
+      {
+        id: "A-04",
+        series: "a",
+        title: "Tanuki",
+        price: "$45 USD",
+        status: "available",
+        medium: "Original Watercolor & Ink on Paper",
+        image: "https://lh3.googleusercontent.com/d/14D7ofYcJBglr__zLQq2AQiyz5NPMeSox"
+      },
+      {
+        id: "A-05",
+        series: "a",
+        title: "Cat: Totowar",
+        price: "$45 USD",
+        status: "available",
+        medium: "Original Watercolor & Ink on Paper",
+        image: "https://lh3.googleusercontent.com/d/1b1yGhlZmKjXod0zna1Yw-vuOB-zeR_2l"
+      },
+      {
+        id: "A-06",
+        series: "a",
+        title: "Snow Leopard: Rei",
+        price: "$45 USD",
+        status: "available",
+        medium: "Original Watercolor & Ink on Paper",
+        image: "https://lh3.googleusercontent.com/d/1sO7VHFXubQZkesFxZdWD4yDr8AZf0hMb"
+      },
+      {
+        id: "A-07",
+        series: "a",
+        title: "Dog: Dr. Biscuit (Bikke)",
+        price: "$45 USD",
+        status: "available",
+        medium: "Original Watercolor & Ink on Paper",
+        image: "https://lh3.googleusercontent.com/d/1hVwHvNqoBLqnNFbrapfbhqicfUHqkFKc"
+      },
+      {
+        id: "A-08",
+        series: "a",
+        title: "Tanuki: Pon",
+        price: "$45 USD",
+        status: "available",
+        medium: "Original Watercolor & Ink on Paper",
+        image: "https://lh3.googleusercontent.com/d/1d84mxIt56CxAbWNw2zacgCX1Xsah01wN"
+      },
+      {
+        id: "A-09",
+        series: "a",
+        title: "Cat: Captain Whiskers",
+        price: "$45 USD",
+        status: "available",
+        medium: "Original Watercolor & Ink on Paper",
+        image: "https://lh3.googleusercontent.com/d/19iuqw1m_9QCILpXZ5a_r-eaJ987zHTXd"
+      },
+      {
+        id: "A-10",
+        series: "a",
+        title: "Cat: Sirius (Blue Collar)",
+        price: "$45 USD",
+        status: "available",
+        medium: "Original Watercolor & Ink on Paper",
+        image: "https://lh3.googleusercontent.com/d/1FXK6Flea8uI_qx-DNvPQ5TuTI2YHP3pR"
+      },
+      {
+        id: "A-11",
+        series: "a",
+        title: "Border Collie: Owen",
+        price: "$45 USD",
+        status: "available",
+        medium: "Original Watercolor & Ink on Paper",
+        image: "https://lh3.googleusercontent.com/d/15st5Z2hMr_UOZwKDNZ9cUCBFx2Ox7yss"
+      },
+      {
+        id: "A-12",
+        series: "a",
+        title: "Fox",
+        price: "$45 USD",
+        status: "available",
+        medium: "Original Watercolor & Ink on Paper",
+        image: "https://lh3.googleusercontent.com/d/1_HU8ss5gJ_aYx8OTjZTZ0kMjsLu5gwsn"
+      },
+      {
+        id: "A-13",
+        series: "a",
+        title: "Pine Marten",
+        price: "$45 USD",
+        status: "available",
+        medium: "Original Watercolor & Ink on Paper",
+        image: "https://lh3.googleusercontent.com/d/1ScvfaBasBT1bYMLdtI03IzBLQMK5bo32"
+      },
+      {
+        id: "A-14",
+        series: "a",
+        title: "Cat: Sirius (Red Collar)",
+        price: "$45 USD",
+        status: "available",
+        medium: "Original Watercolor & Ink on Paper",
+        image: "https://lh3.googleusercontent.com/d/1cRTBapyD2QJ-4nWC8PfJIpBMD1fkEDZk"
+      },
+
+      // Series B ($35 USD)
+      {
+        id: "B-01",
+        series: "b",
+        title: "Gatomon",
+        price: "$35 USD",
+        status: "available",
+        medium: "Original Watercolor & Ink on Paper",
+        image: "https://lh3.googleusercontent.com/d/1GetI_WFUFGmRcAxzp-YS-MT5UJo9wMIk"
+      },
+      {
+        id: "B-02",
+        series: "b",
+        title: "Owain",
+        price: "$35 USD",
+        status: "available",
+        medium: "Original Watercolor & Ink on Paper",
+        image: "https://lh3.googleusercontent.com/d/10CtnRmC38M7Y0zEmKLs5kel8PBLY4QpN"
+      },
+      {
+        id: "B-03",
+        series: "b",
+        title: "Tiger",
+        price: "$35 USD",
+        status: "available",
+        medium: "Original Watercolor & Ink on Paper",
+        image: "https://lh3.googleusercontent.com/d/17NrzFe_C9I84E5d1BE5JuAnO04Pgkm0s"
+      },
+      {
+        id: "B-04",
+        series: "b",
+        title: "Black Cat: Nero",
+        price: "$35 USD",
+        status: "available",
+        medium: "Original Watercolor & Ink on Paper",
+        image: "https://lh3.googleusercontent.com/d/1i6ZD9Ztb156WJVwZt89kQjxwkUM-UR0I"
+      }
+    ];
+
+    const statusConfig = {
+      available: { label: "Available", class: "status-available" },
+      pending: { label: "Pending", class: "status-pending" },
+      sold: { label: "Sold Out", class: "status-sold" }
+    };
+
+    let activeFilter = 'all';
+
+    function renderGallery() {
+      const gallery = document.getElementById('gallery');
+      gallery.innerHTML = '';
+
+      const filtered = items.filter(item => {
+        if (activeFilter === 'all') return true;
+        if (activeFilter === 'series-a') return item.series === 'a';
+        if (activeFilter === 'series-b') return item.series === 'b';
+        if (activeFilter === 'available') return item.status === 'available';
+        if (activeFilter === 'sold') return item.status === 'sold' || item.status === 'pending';
+        return true;
+      });
+
+      filtered.forEach(item => {
+        const statusInfo = statusConfig[item.status];
+        const isSold = item.status === 'sold';
+        const isPending = item.status === 'pending';
+
+        let buttonText = "📋 Copy Order Info";
+        if (isSold) buttonText = "SOLD OUT";
+        if (isPending) buttonText = "PENDING / RESERVED";
+
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <div class="image-wrapper" onclick="openModal('${item.image}')">
+            <img src="${item.image}" alt="${item.title}" loading="lazy">
+          </div>
+          <div class="card-body">
+            <div class="card-header-info">
+              <span class="item-id">${item.id}</span>
+              <span class="status-badge ${statusInfo.class}">${statusInfo.label}</span>
+            </div>
+            <h3 class="item-title">${item.title}</h3>
+            <p class="item-medium">${item.medium}</p>
+            <div class="price-row">
+              <span class="item-price">${item.price}</span>
+              <span class="shipping-note">+ Shipping fee</span>
+            </div>
+            <button 
+              class="action-btn ${(isSold || isPending) ? 'disabled' : ''}" 
+              ${(isSold || isPending) ? 'disabled' : ''}
+              onclick="copyOrderInfo('${item.id}', '${item.title}', '${item.price}')">
+              ${buttonText}
+            </button>
+          </div>
+        `;
+        gallery.appendChild(card);
+      });
+    }
+
+    function applyFilter(filterType) {
+      activeFilter = filterType;
+      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      renderGallery();
+    }
+
+    function copyOrderInfo(id, title, price) {
+      const message = `Hi! I would like to purchase [${id}: ${title}] (${price} + Shipping). Is it still available?`;
+      navigator.clipboard.writeText(message).then(() => {
+        const toast = document.getElementById('toast');
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2800);
+      });
+    }
+
+    function openModal(src) {
+      const modal = document.getElementById('imageModal');
+      document.getElementById('modalImg').src = src;
+      modal.style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('imageModal').style.display = 'none';
+    }
+
+    renderGallery();
+  </script>
+</body>
+</html>
